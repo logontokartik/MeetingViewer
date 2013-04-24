@@ -15,10 +15,10 @@ Mobile Meetings and Meetings Visible.
 Execute the below code in the Developer Console to insert the sample data into meetings object.
 
 <pre>
-List<Meeting__c> meetings = new List<Meeting__c>();
+List<\Meeting__c\> meetings = new List<\Meeting__c\>();
 
-meetings.add(new Meeting__c(Name='Salesforce Demo Meetup Boston',Location__c='Boston',Meeting_Start_Date__c='04/25/2013',Meeting_End_Date__c='04/26/2013',Channel__c='sf_meetup1',Attendees__c=40);
-meetings.add(new Meeting__c(Name='Salesforce Demo Meetup Chicago',Location__c='Chicago',Meeting_Start_Date__c='04/26/2013',Meeting_End_Date__c='04/27/2013',Channel__c='sf_meetup2',Attendees__c=30);
+meetings.add(new Meeting__c(Name='Salesforce Demo Meetup Boston',Location__c='Boston',Meeting_Start_Date__c='04/25/2013',Meeting_End_Date__c='04/26/2013',Channel__c='sf_meetup1',Attendees__c=40));
+meetings.add(new Meeting__c(Name='Salesforce Demo Meetup Chicago',Location__c='Chicago',Meeting_Start_Date__c='04/26/2013',Meeting_End_Date__c='04/27/2013',Channel__c='sf_meetup2',Attendees__c=30));
              
 insert meetings;
 </pre>

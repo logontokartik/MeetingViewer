@@ -23,7 +23,7 @@
             
             function getAllMeetings(){
                 $j.mobile.showPageLoadingMsg();
-                var q = "select id, name, Channel__c, Details__c ,Meeting_Details__c, Meeting_Start_Date__c,Meeting_End_Date__c,Location__c,Attendees__c from Meeting__c order by Meeting_Start_date__c";
+                var q = "select id, name, Channel__c, Details__c, Meeting_Start_Date__c,Meeting_End_Date__c,Location__c,Attendees__c from Meeting__c order by Meeting_Start_date__c";
                 restAPIClient.query(q , 
                             function(response) { 
                                    showMeetings(response.records); 
