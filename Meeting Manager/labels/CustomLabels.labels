@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>PusherAppID</fullName>
+        <categories>Pusher</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>PusherAppID</shortDescription>
+        <value>42291</value>
+    </labels>
+    <labels>
+        <fullName>PusherAuthKey</fullName>
+        <categories>Pusher</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>PusherAuthKey</shortDescription>
+        <value>332ba64c9ce4182700d6</value>
+    </labels>
+    <labels>
+        <fullName>PusherAuthSecret</fullName>
+        <categories>Pusher</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>PusherAuthSecret</shortDescription>
+        <value>4daf561cc05132127517</value>
+    </labels>
+</CustomLabels>

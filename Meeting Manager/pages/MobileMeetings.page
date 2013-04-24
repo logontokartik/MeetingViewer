@@ -1,0 +1,184 @@
+<apex:page docType="html-5.0"
+	       showHeader="false" sidebar="false"
+		   standardController="Meeting__c">          
+	<c:RemoteTK />
+    <apex:stylesheet value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery.mobile-1.3.0.min.css')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery-1.9.1.min.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery.mobile-1.3.0.min.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'ForceTk.js')}"/>
+    <head>
+		<title>Meeting</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <script type="text/javascript">
+            var $j = jQuery.noConflict(); 
+            var meetingRecs = new Array();
+            
+        	var restAPIClient = new remotetk.Client();
+		    restAPIClient.setSessionToken('{!$Api.Session_ID}');
+            
+            $j(document).ready(function() {
+            	regBtnClickHandlers();
+                getAllMeetings();
+            });
+            
+            function getAllMeetings(){
+                $j.mobile.showPageLoadingMsg();
+                var q = "select id, name, Channel__c, Details__c ,Meeting_Details__c, Meeting_Start_Date__c,Meeting_End_Date__c,Location__c,Attendees__c from Meeting__c order by Meeting_Start_date__c";
+                restAPIClient.query(q , 
+                            function(response) { 
+                                   showMeetings(response.records); 
+                                }); 
+            }
+            
+            function showMeetings(records) {    
+                $j('#mList').empty();
+                meetingRecs.length = 0;
+                
+                
+                for(var i = 0; i < records.length; i++) { meetingRecs[records[i].Id] = records[i]; }
+                var x = 0;
+                $j.each(records,
+                    function() {
+                    var newLi = $j('<li></li>');
+                                
+                    var newLink = $j('<a id="' +this.Id+ '" data-transition="flip">' +this.Name+ '</a>');
+                    newLink.click(function(e) {
+                        e.preventDefault();
+                        $j.mobile.showPageLoadingMsg();
+                        $j('#mName').val(meetingRecs[this.id].Name);
+                        $j('#mChl').val(meetingRecs[this.id].Channel__c);
+                        $j('#mStart').val(meetingRecs[this.id].Meeting_Start_Date__c);
+                        $j('#mEnd').val(meetingRecs[this.id].Meeting_End_Date__c);
+                        $j('#mLoc').val(meetingRecs[this.id].Location__c);
+                        $j('#mAtt').val(meetingRecs[this.id].Attendees__c);
+                        $j('#mDet').empty();
+                        $j('#mDet').append(meetingRecs[this.id].Details__c);
+                        $j('#MeetingId').val(meetingRecs[this.id].Id);
+                        $j('#error').html('');
+                       
+                        $j.mobile.changePage('#detailpage', {changeHash: true});
+                    });
+                    newLi.append(newLink);            
+                    newLi.appendTo('#mList');
+                    x++;
+                  });
+                
+                $j.mobile.hidePageLoadingMsg();
+                $j('#mList').listview('refresh');
+            }      
+        
+            function addUpdateMeeting(e){
+                e.preventDefault();
+                var mId = $j('#MeetingId').val();
+                var Meeting = { Name : $j('#mName').val(),
+                				Channel__c : $j('#mChl').val(),
+                                Meeting_Start_Date__c : $j('#mStart').val(),
+                                Meeting_End_Date__c : $j('#mEnd').val(),
+                                Location__c : $j('#mLoc').val(),
+                                Attendees__c : $j('#mAtt').val(),
+                                Details__c : $j('#mDet').val()};
+                if (mId === 'undefined' || mId === ''){
+                    restAPIClient.create('Meeting__c', Meeting, sucessCallback, displayError); 
+                } else {
+                    restAPIClient.update('Meeting__c', mId, Meeting, sucessCallback, displayError); 
+                }
+            }
+        
+            function deleteMeeting(e){
+                e.preventDefault();
+                restAPIClient.del('Meeting__c', $j('#MeetingId').val(), sucessCallback, displayError);
+            }
+            
+            function sucessCallback(r){
+                getAllMeetings();
+                $j.mobile.changePage('#listpage', {changeHash: true});
+            }
+        
+            function displayError(e){
+                var error = JSON.parse(e.responseText);
+                $j('#error').html(error[0].message);
+            }
+        
+            function regBtnClickHandlers() {
+                $j('#add').click(function(e) {
+                    e.preventDefault();
+                    $j.mobile.showPageLoadingMsg();
+                    $j('#mName').val('');
+                    $j('#mChl').val('');
+                    $j('#mStart').val('');
+                    $j('#mEnd').val('');
+                    $j('#mLoc').val('');
+                    $j('#mAtt').val('');
+                    $j('#mDet').val('');
+                    $j('#error').html('');
+                    $j('#MeetingId').val('');
+                    $j.mobile.changePage('#detailpage', {changeHash: true});
+                    $j.mobile.hidePageLoadingMsg();            
+                });
+        
+                $j('#save').click(function(e) {
+                   addUpdateMeeting(e);
+                });
+        
+                $j('#delete').click(function(e) {
+                   deleteMeeting(e);
+                });
+            }
+		</script>    
+	</head>
+
+    <body>    
+        <div data-role="page" data-theme="b" id="listpage">                
+            <div data-role="header" data-position="fixed">
+                <h2>Meetings</h2>
+	            <a href='#' id="add" class='ui-btn-right' data-icon='add' data-theme="b">Add</a>
+            </div>
+            <div data-role="content" id="meetingList">            
+                <ul id="mList" data-filter="true" data-inset="true" data-role="listview" 
+                    data-theme="c" data-dividertheme="b">
+                </ul>
+            </div>
+        </div>
+        
+        <div data-role="page" data-theme="b" id="detailpage">
+            <div data-role="header" data-position="fixed">
+                <a href='#listpage' id="back2MeetingList" class='ui-btn-left' data-icon='arrow-l' data-direction="reverse" data-transition="flip">Back</a>
+                <h1>Meeting Details</h1>
+            </div>
+            <div data-role="content">
+				<div data-role="fieldcontain">
+					<label for="mName">Meeting Name:</label>
+					<input name="mName" id="mName" />
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mChl">Meeting Channel:</label>
+					<input name="mChl" id="mChl" />
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mStart">Meeting Start Date:</label>
+					<input type="date" name="mStart" id="mStart" />
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mEnd">Meeting End Date:</label>
+					<input type="date" name="mEnd" id="mEnd" />
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mLoc">Meeting Location:</label>
+					<input name="mLoc" id="mLoc"/>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mAtt">Meeting Attendees:</label>
+					<input name="mAtt" id="mAtt"/>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mDet">Meeting Details (Enter your summary):</label>
+					<textarea  cols="40" rows="8" name="mDet" id="mDet"/>
+				</div>
+				<h2 style="color:red" id="error"></h2><br/>
+                <input type="hidden" id="MeetingId" />
+				<button id="save" data-role="button" data-icon="check" data-inline="true" data-theme="b" class="save">Save</button>
+				<button id="delete" data-role="button" data-icon="delete" data-inline="true" class="destroy">Delete</button>
+            </div>    
+        </div>  
+    </body>    
+</apex:page>
