@@ -67,7 +67,7 @@
                 $j('#mList').listview('refresh');
             }      
         
-            function addUpdateMeeting(e){
+            function addUpdateMeeting(e,saveId){
                 e.preventDefault();
                 var mId = $j('#MeetingId').val();
                 var Meeting = { Name : $j('#mName').val(),
@@ -78,9 +78,16 @@
                                 Attendees__c : $j('#mAtt').val(),
                                 Details__c : $j('#mDet').val()};
                 if (mId === 'undefined' || mId === ''){
-                    restAPIClient.create('Meeting__c', Meeting, sucessCallback, displayError); 
+                    if(saveId == 'saveBack')
+                   	 restAPIClient.create('Meeting__c', Meeting, sucessCallback, displayError); 
+                   	else
+                   	  restAPIClient.create('Meeting__c', Meeting, sucessCall, displayError); 
+                   		 
                 } else {
-                    restAPIClient.update('Meeting__c', mId, Meeting, sucessCallback, displayError); 
+                    if(saveId == 'saveBack')
+                   		restAPIClient.update('Meeting__c', mId, Meeting, sucessCallback, displayError); 
+                   	else
+                   		restAPIClient.update('Meeting__c', mId, Meeting, sucessCall, displayError);
                 }
             }
         
@@ -92,6 +99,9 @@
             function sucessCallback(r){
                 getAllMeetings();
                 $j.mobile.changePage('#listpage', {changeHash: true});
+            }
+            
+            function sucessCall(r){
             }
         
             function displayError(e){
@@ -116,8 +126,8 @@
                     $j.mobile.hidePageLoadingMsg();            
                 });
         
-                $j('#save').click(function(e) {
-                   addUpdateMeeting(e);
+                $j('.save').click(function(e) {
+                   addUpdateMeeting(e,this.id);
                 });
         
                 $j('#delete').click(function(e) {
@@ -177,6 +187,7 @@
 				<h2 style="color:red" id="error"></h2><br/>
                 <input type="hidden" id="MeetingId" />
 				<button id="save" data-role="button" data-icon="check" data-inline="true" data-theme="b" class="save">Save</button>
+				<button id="saveBack" data-role="button" data-icon="check" data-inline="true" data-theme="b" class="save">Save and Back</button>
 				<button id="delete" data-role="button" data-icon="delete" data-inline="true" class="destroy">Delete</button>
             </div>    
         </div>  

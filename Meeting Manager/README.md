@@ -9,7 +9,7 @@ This is simple Meeting Manager Application that allows users to enter details ab
 <h2>Configurartion</h2>
 * By Default the visibility of the App is turned off in Salesforce. To view the app Navigate to Setup --> Administration --> Profile, choose the profile you are working on click on edit and make the App "Meeting Manager" Visible. Also make the tabs
 Mobile Meetings and Meetings Visible.
-
+* Add the Remote Site "PusherAPI - https://api.pusherapp.com"
 <h2>Sample Data</h2>
 
 Execute the below code in the Developer Console to insert the sample data into meetings object.
