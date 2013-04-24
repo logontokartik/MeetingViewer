@@ -3,6 +3,7 @@ This simple PHP + JQuery app uses the Pusher Client Libraries to get the real-ti
 
 <h2>Deploying to Heroku</h2>
 * git clone git@github.com:logontokartik/MeetingViewer.git
+* Navigate to the MeetingViewer folder within MeetingViewer.
 * heroku apps:create
 * git push heroku master
 * heroku open
