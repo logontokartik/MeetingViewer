@@ -26,6 +26,7 @@
         <members>Meeting__c.Attendees__c</members>
         <members>Meeting__c.Channel__c</members>
         <members>Meeting__c.Details__c</members>
+        <members>Meeting__c.Highlights__c</members>
         <members>Meeting__c.Location__c</members>
         <members>Meeting__c.Meeting_End_Date__c</members>
         <members>Meeting__c.Meeting_Start_Date__c</members>
@@ -57,6 +58,10 @@
     <types>
         <members>Meeting__c.All</members>
         <name>ListView</name>
+    </types>
+    <types>
+        <members>PusherAPI</members>
+        <name>RemoteSiteSetting</name>
     </types>
     <types>
         <members>MobileSample_Resources_jQueryMobile</members>

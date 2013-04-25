@@ -34,6 +34,10 @@
                 <behavior>Edit</behavior>
                 <field>Channel__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Highlights__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

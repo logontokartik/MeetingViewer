@@ -6,15 +6,16 @@
 	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery-1.9.1.min.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'jquery.mobile-1.3.0.min.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.MobileSample_Resources_jQueryMobile, 'ForceTk.js')}"/>
-    <head>
+	<head>
 		<title>Meeting</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <script type="text/javascript">
+              
             var $j = jQuery.noConflict(); 
             var meetingRecs = new Array();
             
-        	var restAPIClient = new remotetk.Client();
-		    restAPIClient.setSessionToken('{!$Api.Session_ID}');
+        	var remoteJSClient = new remotetk.Client();
+		    remoteJSClient.setSessionToken('{!$Api.Session_ID}');
             
             $j(document).ready(function() {
             	regBtnClickHandlers();
@@ -23,8 +24,8 @@
             
             function getAllMeetings(){
                 $j.mobile.showPageLoadingMsg();
-                var q = "select id, name, Channel__c, Details__c, Meeting_Start_Date__c,Meeting_End_Date__c,Location__c,Attendees__c from Meeting__c order by Meeting_Start_date__c";
-                restAPIClient.query(q , 
+                var q = "select id, name, Channel__c, Details__c, Highlights__c, Meeting_Start_Date__c,Meeting_End_Date__c,Location__c,Attendees__c from Meeting__c order by Meeting_Start_date__c";
+                remoteJSClient.query(q , 
                             function(response) { 
                                    showMeetings(response.records); 
                                 }); 
@@ -52,7 +53,7 @@
                         $j('#mLoc').val(meetingRecs[this.id].Location__c);
                         $j('#mAtt').val(meetingRecs[this.id].Attendees__c);
                         $j('#mDet').empty();
-                        $j('#mDet').append(meetingRecs[this.id].Details__c);
+                        $j('#mDet').append(meetingRecs[this.id].Highlights__c);
                         $j('#MeetingId').val(meetingRecs[this.id].Id);
                         $j('#error').html('');
                        
@@ -79,21 +80,21 @@
                                 Details__c : $j('#mDet').val()};
                 if (mId === 'undefined' || mId === ''){
                     if(saveId == 'saveBack')
-                   	 restAPIClient.create('Meeting__c', Meeting, sucessCallback, displayError); 
+                   	 remoteJSClient.create('Meeting__c', Meeting, sucessCallback, displayError); 
                    	else
-                   	  restAPIClient.create('Meeting__c', Meeting, sucessCall, displayError); 
+                   	  remoteJSClient.create('Meeting__c', Meeting, sucessCall, displayError); 
                    		 
                 } else {
                     if(saveId == 'saveBack')
-                   		restAPIClient.update('Meeting__c', mId, Meeting, sucessCallback, displayError); 
+                   		remoteJSClient.update('Meeting__c', mId, Meeting, sucessCallback, displayError); 
                    	else
-                   		restAPIClient.update('Meeting__c', mId, Meeting, sucessCall, displayError);
+                   		remoteJSClient.update('Meeting__c', mId, Meeting, sucessCall, displayError);
                 }
             }
         
             function deleteMeeting(e){
                 e.preventDefault();
-                restAPIClient.del('Meeting__c', $j('#MeetingId').val(), sucessCallback, displayError);
+                remoteJSClient.del('Meeting__c', $j('#MeetingId').val(), sucessCallback, displayError);
             }
             
             function sucessCallback(r){
@@ -181,7 +182,7 @@
 					<input name="mAtt" id="mAtt"/>
 				</div>
 				<div data-role="fieldcontain">
-					<label for="mDet">Meeting Details (Enter your summary):</label>
+					<label for="mDet">Meeting Highlights (Enter your summary):</label>
 					<textarea  cols="40" rows="8" name="mDet" id="mDet"/>
 				</div>
 				<h2 style="color:red" id="error"></h2><br/>

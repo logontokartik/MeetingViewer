@@ -4,7 +4,7 @@ trigger afterUpdateOrInsert on Meeting__c (after update) {
     String channelName;
         
     for(Meeting__c m : trigger.new){
-    	meetingNameDetails.put(m.Name,m.Details__c);
+    	meetingNameDetails.put(m.Name,m.Highlights__c);
     	channelName = m.Channel__c; // Assuming only one meeting is updated.
     }
     
